@@ -15,10 +15,10 @@ Here you can see when Bitcoin was in the `$6500` zone that the order books were 
 Over the next week, Bitcoin shot up to nearly `$9K`.
 
 ## How?
-The logger runs every 10 seconds and logs to a rolling log file in the `data` directory.
+The logger runs every 1 minute and logs to a rolling log file in the `data` directory.
 It logs the following columns, tab delimited
 ```
-datetime price size big ask volume m1_buy m5_buy m10_buy m20_buy m50_buy m1_sell m5_sell m10_sell m20_sell m50_sell
+datetime price size bid ask volume m1_buy m5_buy m10_buy m20_buy m50_buy m1_sell m5_sell m10_sell m20_sell m50_sell
 ```
 
 ## Getting Started
@@ -33,3 +33,18 @@ or run as a never stopping service with PM2
 npm i -g pm2
 pm2 start npm --name "btc_orders" -- start; pm2 logs
 ```
+
+## Visualizing Data
+
+What good is an indicator without some data visualization?
+
+For now, I'm playing with the data in Python because that's where I have all my machine learning tooling.
+Launch Jupyter Notebooks to ingest the data in python:
+
+locally:
+```
+docker run -it -v $(pwd):/home/jovyan --rm -p 8888:8888 jupyter/scipy-notebook
+```
+or [launch on the web using MyBinder](https://mybinder.org/v2/gh/atomantic/bitcoin_orderbook_indicator/master)
+
+`TODO`: would be cool to also load this up using [D3](https://d3js.org/) in JavaScript to make a website for it.

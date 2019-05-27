@@ -1,0 +1,6 @@
+.cache
+.config
+.ipynb_checkpoints
+.local
+.ipython
+node_modules

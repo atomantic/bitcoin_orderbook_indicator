@@ -1,0 +1,19 @@
+{
+  "name": "btc_orderbook_indicator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async.parallel": "0.5.2",
+    "coinbase-pro": "0.9.0",
+    "lodash": "4.17.11",
+    "mathjs": "5.10.3",
+    "rolling-file": "1.0.11"
+  }
+}

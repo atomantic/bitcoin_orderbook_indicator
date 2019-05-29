@@ -1,5 +1,7 @@
 # BTC Order Book Indicator
 
+> DISCLAIMER: nothing in this project is financial advice. Any ideas of trading, investment, or other tomfoolery is at your own risk, discretion, and responsibility. The creator of this project has no position in Bitcoin. This is just for scientific interest.
+
 Polls the Coinbase Pro order book for BTCUSD and logs the following:
 - timestamp
 - the current price

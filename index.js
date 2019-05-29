@@ -1,9 +1,9 @@
-const CoinbasePro = require('coinbase-pro')
-const publicClient = new CoinbasePro.PublicClient()
-const math = require('mathjs')
-const rollingFile = require('rolling-file')
-const parallel = require('async.parallel')
 const _ = require('lodash')
+const CoinbasePro = require('coinbase-pro')
+const math = require('mathjs')
+const parallel = require('async.parallel')
+const publicClient = new CoinbasePro.PublicClient()
+const rollingFile = require('rolling-file')
 
 // movement thresholds
 const buckets = {
@@ -18,16 +18,12 @@ const f = rollingFile('./data', {
     fileName: 'book', byteLimit: '10 MB' 
 })
 
-process.on('exit', (code) => {
-    console.log(`writing last data with exit code ${code}`)
-    f.end()
-})
-
 const getThresholdPrices = (book, logLine)=>{
-    let carry = 0 // carryover to put the 1M+ in the 5M count, etc
+    let carry = 0 // carryover to put the 1M+ in the 5M count, and so on...
     _.each(buckets, (targetValue, key)=>{
         let total = carry
-        // chop the order book at the point at which the total volume accumulates key (e.g. $1M) in price drop
+        // chop the order book at the point at which the total volume accumulates the desired limit
+        // (e.g. $1M) in price change
         let orders = _.takeWhile(book, (order)=>{
             total += math.multiply(order[0], order[1])
             return total < targetValue
@@ -35,6 +31,8 @@ const getThresholdPrices = (book, logLine)=>{
         carry = total // new carryover value for the next bucket
         let sliceIndex = orders.length-1
         logLine += `\t${orders[sliceIndex][0]}` // add the price to the logger
+        // update the book for the next target
+        // we don't need to look through the first $1 million when we look for the $5M target
         book = book.slice(sliceIndex)
     })
     return logLine
@@ -62,4 +60,4 @@ const getData = ()=>{
     })
 }
 getData()
-setInterval(getData, 60000)
+setInterval(getData, Number(process.env.RATE||60000))

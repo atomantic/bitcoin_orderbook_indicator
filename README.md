@@ -54,7 +54,7 @@ or [launch on the web using MyBinder](https://mybinder.org/v2/gh/atomantic/bitco
 `TODO`: would be cool to also load this up using [D3](https://d3js.org/) in JavaScript to make a website for it.
 
 ![sample data](img/sample.png)
-*here we see running the engine for about 2 days during a price pump*
+*here we see running the engine for a few days during a price pump*
 
 
 ## What Else?

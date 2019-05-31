@@ -26,14 +26,30 @@ new Vue({
       }
 
       const data = this.logs;
+      const dateFields = ['date', 'hour', 'minute', 'day'];
+      // prep the data, merging records to mean() of the per hour
+      const hourly = d3.nest()
+        .key(d=>d.hour)
+        .rollup(function(v) {
+          const record = {};
+          Object.keys(data[0]).forEach(k=>{
+            if(!dateFields.includes(k)){
+              return record[k] = d3.mean(v, d=>d[k]);
+            }
+          })
+          return record;
+        })
+        .entries(data);
+      console.log({hourly});
+
       // prep the data, extract each line we want to draw into a new series
       const series = [];
       config.lines.forEach(conf=>{
         series.push({
-          p: this.logs.map(log=>{
+          p: hourly.map(group=>{
             return {
-              x: log.date,
-              y: log[conf.field]
+              x: new Date(group.key),
+              y: group.value[conf.field]
             }
           }),
           c: conf.color,

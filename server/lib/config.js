@@ -8,6 +8,7 @@ module.exports = {
   },
   columns: [
     'date', 'price', 'size', 'bid', 'ask', 'volume',
+    'total_buy', 'total_sell', 'max_up_slippage', 'max_down_slippage',
     'm1_buy','m5_buy','m10_buy','m20_buy','m50_buy','m1_sell','m5_sell','m10_sell','m20_sell','m50_sell'
   ],
   columnStrings: ['date'],

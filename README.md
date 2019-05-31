@@ -39,9 +39,20 @@ sequenceDiagram
 The logger runs every 1 minute and logs to a rolling log file in the `data` directory.
 It logs the following columns, tab delimited
 ```
-datetime price size bid ask volume m1_buy m5_buy m10_buy m20_buy m50_buy m1_sell m5_sell m10_sell m20_sell m50_sell
+datetime price size bid ask volume total_buy total_sell_volume max_up_slippage max_down_slippage m1_buy m5_buy m10_buy m20_buy m50_buy m1_sell m5_sell m10_sell m20_sell m50_sell
 ```
 We can then take this data in python (there's a Jupyter Notebook in the `notebooks` directory), process the data, and visualize it (just for experimentation).
+
+
+## Notes on Project Data
+
+This is very experimental. As such, I realized some data I wanted to collect after the engine was running for a few days. Rather than deleting the old data, I backfilled generic approximations for the new data fields:
+```
+replacing: ([^Z]+Z\s[\d.]+[\d.]+\s[\d.]+\s[\d.]+\s[\d.]+\s[\d.]+)
+with: $1	55000000	180000	250000	0.01
+```
+These fields are:
+`total_buy` `total_sell_volume` `max_up_slippage` `max_down_slippage`
 
 ## Getting Started
 

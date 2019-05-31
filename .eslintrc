@@ -8,6 +8,7 @@
     "es6": true
   },
   "globals": {
+    "d3": true,
     "io": true
   },
   "ecmaFeatures": {

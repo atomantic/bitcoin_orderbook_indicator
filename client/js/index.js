@@ -1,7 +1,6 @@
 // var _ = require('lodash');
 const config = require('./config');
 const Vue = require('vue/dist/vue.js');
-const d3 = require('d3/dist/d3.min.js');
 const processLog = require('./process.log');
 const socket = io();
 
@@ -44,7 +43,9 @@ new Vue({
 
       // prep the data, extract each line we want to draw into a new series
       const series = [];
+      const keys = [];
       config.lines.forEach(conf=>{
+        keys.push(conf.label);
         series.push({
           p: hourly.map(group=>{
             return {
@@ -58,6 +59,10 @@ new Vue({
         })
       });
       window.series = series;
+
+      var color = d3.scaleOrdinal()
+        .domain(keys)
+        .range(d3.schemeSet2);
 
       var margin = { top: 20, right: 20, bottom: 30, left: 50 };
       var width = this.width - margin.left - margin.right;
@@ -73,6 +78,29 @@ new Vue({
           .append("g")
           .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");
+
+      // LEGEND
+      // Add one dot in the legend for each name.
+      svg.selectAll("mydots")
+        .data(keys)
+        .enter()
+        .append("circle")
+          .attr("cx", 50)
+          .attr("cy", (d,i) => 25 + i*25) // 100 is where the first dot appears. 25 is the distance between dots
+          .attr("r", 7)
+          .style("fill", d=>color(d))
+
+      // Add one dot in the legend for each name.
+      svg.selectAll("mylabels")
+        .data(keys)
+        .enter()
+        .append("text")
+          .attr("x", 60)
+          .attr("y", (d,i) => 25 + i*25)
+          .style("fill", d=>color(d))
+          .text(d=>d)
+          .attr("text-anchor", "left")
+          .style("alignment-baseline", "middle")
 
       // scale the range of the data
       x.domain(d3.extent(data, d=>d.date));
@@ -101,7 +129,7 @@ new Vue({
           .attr("class", "line")
           .text(d=>d.l)
           .style('stroke-width', d=>d.w)
-          .style('stroke', d=>d.c)
+          .style('stroke', d=>color(d.l))
           .style('fill', 'none')
           .attr("d", d=>line(d.p));
       })

@@ -16,7 +16,7 @@ module.exports = {
     generateNonces: false,
     fontSrc: "'self'",
     imgSrc: "'self'",
-    scriptSrc: "'self' 'unsafe-inline' 'unsafe-eval'",
+    scriptSrc: "'self' d3js.org 'unsafe-inline' 'unsafe-eval'",
     styleSrc: "'self' 'unsafe-inline'"
   }
 }

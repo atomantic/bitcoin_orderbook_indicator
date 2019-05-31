@@ -7,10 +7,9 @@ const config = require('./config');
 module.exports = function(log){
   // split date for groupings: 2019-05-30T15:03:37.884Z
   log.day = log.date.split('T')[0] + 'T00:00:00.000Z'; // 2019-05-30
-  const colonSplit = log.date.split(':'); // 2019-05-30T15
-  log.hour = colonSplit[0] + ':00:00.000Z';
-  log.minute = colonSplit[0] + colonSplit[1] +  + ':00.000Z'; // 2019-05-30T15:03
-  log.date = new Date(log.date);
+  log.hour = log.date.replace(/\d{2}:\d{2}.\d{3}Z/, '00:00.000Z');
+  log.minute = log.date.replace(/\d{2}.\d{3}Z/, '00.000Z'); // 2019-05-30T15:03
+  // log.date = new Date(log.date);
   config.limits.forEach(limit=>{
     log[limit+'_buy_diff'] = log.price - log[limit+'_buy']
     log[limit+'_sell_diff'] = log[limit+'_sell'] - log.price

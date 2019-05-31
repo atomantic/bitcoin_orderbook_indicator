@@ -3,10 +3,12 @@ const config = require('./config');
 const Vue = require('vue/dist/vue.js');
 const processLog = require('./process.log');
 const socket = io();
+const dateFields = ['date', 'hour', 'minute', 'day'];
 
 const vueData = {
   connected: false,
   logs: [],
+  grouping: 'hour',
   width: 980,
   height: 500
 };
@@ -19,35 +21,44 @@ new Vue({
     // e.g. register components
   },
   methods: {
+    toggleGroup(grouping){
+      console.log('changing grouping', grouping)
+      vueData.grouping = grouping;
+      this.renderChart();
+    },
     renderChart() {
       if (document.getElementsByTagName('svg')){
           d3.selectAll('svg').remove();
       }
 
-      const data = this.logs;
-      const dateFields = ['date', 'hour', 'minute', 'day'];
-      // prep the data, merging records to mean() of the per hour
-      const hourly = d3.nest()
-        .key(d=>d.hour)
+      const recordKeys = Object.keys(this.logs[0]);
+      // prep the data, merging records via mean() of each numeric value
+      console.log(this.logs);
+      const grouping = d3.nest()
+        .key(d=>d[this.grouping])
         .rollup(function(v) {
           const record = {};
-          Object.keys(data[0]).forEach(k=>{
+          recordKeys.forEach(k=>{
             if(!dateFields.includes(k)){
               return record[k] = d3.mean(v, d=>d[k]);
             }
           })
           return record;
         })
-        .entries(data);
-      console.log({hourly});
+        .entries(this.logs);
+      console.log({grouping});
 
       // prep the data, extract each line we want to draw into a new series
       const series = [];
       const keys = [];
+      let priceData;
       config.lines.forEach(conf=>{
         keys.push(conf.label);
-        series.push({
-          p: hourly.map(group=>{
+        const data = {
+          p: grouping.map(group=>{
+            if(new Date(group.key)==='Invalid Date') {
+              console.log('invalid', group)
+            }
             return {
               x: new Date(group.key),
               y: group.value[conf.field]
@@ -56,7 +67,11 @@ new Vue({
           c: conf.color,
           l: conf.label,
           w: conf.width
-        })
+        };
+        series.push(data);
+        if(conf.field==='price'){
+          priceData = data.p;
+        }
       });
       window.series = series;
 
@@ -103,20 +118,21 @@ new Vue({
           .style("alignment-baseline", "middle")
 
       // scale the range of the data
-      x.domain(d3.extent(data, d=>d.date));
+      x.domain(d3.extent(priceData, d=>d.x));
       y.domain([
-        d3.min(data, d => d.price - d.price*.2),
-        d3.max(data, d => d.price + d.price*.2)
+        d3.min(priceData, d => d.y - d.y*.2),
+        d3.max(priceData, d => d.y + d.y*.2)
       ]);
 
       // add the area
       svg.append("path")
-        .data([data])
+        .data([priceData])
         .attr("class", "area")
+        .style('fill', 'lightsteelblue')
         .attr("d", d3.area()
-          .x(d=> x(d.date))
+          .x(d=> x(d.x))
           .y0(height)
-          .y1(d=>y(d.price))
+          .y1(d=>y(d.y))
         );
 
       var line = d3.line()

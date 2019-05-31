@@ -18,21 +18,44 @@ Here you can see when Bitcoin was in the `$6500` zone on May 10th, 2019 that the
 Over the next week, Bitcoin shot up to nearly `$9K`.
 
 ## How?
+
+
+```mermaid
+sequenceDiagram
+    participant Engine
+    participant Coinbase API
+    participant UI
+    Engine->>Engine: startup
+    Engine->>Coinbase API: fetch order book
+    Engine->>UI: websocket send new data
+    UI->>UI: render graphs
+    loop Healthcheck
+        Engine->>Coinbase API: poll order book every 1 minute
+        Engine->>UI: socket send new data
+        UI->>UI: update graphs
+    end
+```
+
 The logger runs every 1 minute and logs to a rolling log file in the `data` directory.
 It logs the following columns, tab delimited
 ```
 datetime price size bid ask volume m1_buy m5_buy m10_buy m20_buy m50_buy m1_sell m5_sell m10_sell m20_sell m50_sell
 ```
-We then take this data in python (there's a Jupyter Notebook in the `notebooks` directory), process the data, and visualize it (just for experimentation).
+We can then take this data in python (there's a Jupyter Notebook in the `notebooks` directory), process the data, and visualize it (just for experimentation).
 
 ## Getting Started
 
+Development mode
+* starts up the runner to collect data every minute
+* starts the UI
+* watches client code for changes
 ```
-npm i
-npm start
+npm run setup
+npm run dev
 ```
 
-or run as a never stopping service with PM2
+Production mode
+using PM2 to keep the service alive:
 ```
 npm i -g pm2
 pm2 start npm --name "btc_orders" -- start; pm2 logs
@@ -51,10 +74,10 @@ docker run -it -v $(pwd):/home/jovyan --rm -p 8888:8888 jupyter/scipy-notebook
 ```
 or [launch on the web using MyBinder](https://mybinder.org/v2/gh/atomantic/bitcoin_orderbook_indicator/master)
 
-`TODO`: would be cool to also load this up using [D3](https://d3js.org/) in JavaScript to make a website for it.
-
 ![sample data](img/sample.png)
 *here we see running the engine for a few days during a price pump*
+
+Additionally, the app now launches a UI service that charts the data using D3, and live updates as the runner collects more data.
 
 
 ## What Else?

@@ -1,0 +1,3 @@
+server/data/*.txt
+server/data/*.localstorage
+server/data/db.results.json

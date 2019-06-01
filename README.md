@@ -19,7 +19,6 @@ Over the next week, Bitcoin shot up to nearly `$9K`.
 
 ## How?
 
-
 ```mermaid
 sequenceDiagram
     participant Engine
@@ -43,6 +42,9 @@ We log the following columns, tab delimited
 datetime price size bid ask volume total_buy total_sell_volume max_up_slippage max_down_slippage m1_buy m5_buy m10_buy m20_buy m50_buy m1_sell m5_sell m10_sell m20_sell m50_sell
 ```
 We can then take this data in python (there's a Jupyter Notebook in the `notebooks` directory), process the data, and visualize it (just for experimentation).
+
+Additionally, the app runs a UI service that streams the data via websockets to a D3 graph
+![dashboard](img/dashboard.png)
 
 
 ## Notes on Project Data

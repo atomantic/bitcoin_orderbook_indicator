@@ -9,6 +9,7 @@ const vueData = {
   connected: false,
   logs: [],
   grouping: 'hour',
+  target: 'default',
   width: 980,
   height: 500
 };
@@ -21,9 +22,14 @@ new Vue({
     // e.g. register components
   },
   methods: {
-    toggleGroup(grouping){
+    setGroup(grouping){
       console.log('changing grouping', grouping)
       vueData.grouping = grouping;
+      this.renderChart();
+    },
+    setTarget(target){
+      console.log('changing target', target)
+      vueData.target = target;
       this.renderChart();
     },
     renderChart() {
@@ -52,7 +58,20 @@ new Vue({
       const series = [];
       const keys = [];
       let priceData;
-      config.lines.forEach(conf=>{
+
+      const lines = this.target==='default' ? config.lines : [{
+        label: 'Price',
+        field: 'price',
+        width: 2
+      }].concat(config.fields.map(f=>{
+        return {
+          label: '$'+this.target.replace('m','')+'M '+f,
+          field: `${this.target}_${f}`,
+          width: 1
+        }
+      }))
+
+      lines.forEach(conf=>{
         keys.push(conf.label);
         const data = {
           p: grouping.map(group=>{

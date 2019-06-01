@@ -13,11 +13,11 @@ module.exports = function(log){
   config.limits.forEach(limit=>{
     log[limit+'_buy_diff'] = log.price - log[limit+'_buy']
     log[limit+'_sell_diff'] = log[limit+'_sell'] - log.price
-    log[limit+'_range'] = log[limit+'_sell'] - log[limit+'_buy']
-    log[limit+'_percentage'] = log[limit+'_buy_diff'] / log[limit+'_range']
-    log[limit+'_support'] = log.price * (1-log[limit+'_percentage'])
+    // log[limit+'_range'] = log[limit+'_sell'] - log[limit+'_buy']
+    // log[limit+'_percentage'] = log[limit+'_buy_diff'] / log[limit+'_range']
+    // log[limit+'_support'] = log.price * (1-log[limit+'_percentage'])
     log[limit+'_mid'] = (log[limit+'_buy'] + log[limit+'_sell']) / 2
-    log[limit+'_target'] = log.price + log[limit+'_sell_diff'] - log[limit+'_buy_diff']
+    log[limit+'_pressure'] = log.price + log[limit+'_sell_diff'] - log[limit+'_buy_diff']
   });
   return log;
 };

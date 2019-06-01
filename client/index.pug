@@ -20,13 +20,23 @@ html
       main(role='main')
         #charts
           #all-data
-        div
-          span grouping: 
-          .btn-group
-            button.btn.btn-secondary(role='button', v-on:click="toggleGroup('date')") all
-            button.btn.btn-secondary(role='button', v-on:click="toggleGroup('minute')") minute
-            button.btn.btn-secondary(role='button', v-on:click="toggleGroup('hour')") hourly
-            button.btn.btn-secondary(role='button', v-on:click="toggleGroup('day')") daily
+        .controls
+          .set
+            strong grouping: 
+            .btn-group
+              button.btn.btn-secondary(role='button', v-on:click="setGroup('date')") all
+              button.btn.btn-secondary(role='button', v-on:click="setGroup('minute')") minute
+              button.btn.btn-secondary(role='button', v-on:click="setGroup('hour')") hourly
+              button.btn.btn-secondary(role='button', v-on:click="setGroup('day')") daily
+          .set
+            strong set: 
+            .btn-group
+              button.btn.btn-secondary(role='button', v-on:click="setTarget('default')") default
+              button.btn.btn-secondary(role='button', v-on:click="setTarget('m1')") $1M
+              button.btn.btn-secondary(role='button', v-on:click="setTarget('m5')") $5M
+              button.btn.btn-secondary(role='button', v-on:click="setTarget('m10')") $10
+              button.btn.btn-secondary(role='button', v-on:click="setTarget('m20')") $20
+              button.btn.btn-secondary(role='button', v-on:click="setTarget('m50')") $50
               
       #footpad
         footer

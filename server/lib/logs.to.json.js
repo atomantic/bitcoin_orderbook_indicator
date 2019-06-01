@@ -18,7 +18,7 @@ module.exports = (cb)=>{
         return log.err(err)
       }
       contents.sort() // make sure they come out chronological
-      const json = contents.join('\n')
+      const json = contents.join('\n').replace(/\n\n/g, '\n')
         .split('\n')
         .map(logParse)
       cb(json)

@@ -1,5 +1,6 @@
 const _ = require('lodash')
 const CoinbasePro = require('coinbase-pro')
+// const fs = require('fs')
 const getThresholdPrices = require('./get.threshold.prices')
 const logParse = require('./log.parse')
 const math = require('mathjs')
@@ -30,6 +31,8 @@ const runner = {
         const ticker = data[0]
         const bids = data[1].bids
         const asks = data[1].asks
+
+        // fs.writeFile(__dirname+'/../../data/book.json', JSON.stringify(data, null, 2), ()=>{})
 
         // order book contains [$, vol, id]
         // [ '8439.34', '0.27524952', '8d51f26c-fe03-4f22-ad58-220483cfe094' ]

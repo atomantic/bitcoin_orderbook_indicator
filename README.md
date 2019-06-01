@@ -37,7 +37,8 @@ sequenceDiagram
 ```
 
 The logger runs every 1 minute and logs to a rolling log file in the `data` directory.
-It logs the following columns, tab delimited
+The payload for the BTCUSD orderbook is `2.8MB`, so we have to limit the data collection every minute :)
+We log the following columns, tab delimited
 ```
 datetime price size bid ask volume total_buy total_sell_volume max_up_slippage max_down_slippage m1_buy m5_buy m10_buy m20_buy m50_buy m1_sell m5_sell m10_sell m20_sell m50_sell
 ```

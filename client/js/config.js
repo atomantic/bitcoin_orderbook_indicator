@@ -10,28 +10,28 @@ module.exports = {
     {
       label: '$1M Pressure',
       field: 'm1_pressure',
-      width: 2
+      width: 3
     },
     {
       label: '$5M Pressure',
       field: 'm5_pressure',
-      width: 2
+      width: 3
     },
     {
       label: '$10M Pressure',
       field: 'm10_pressure',
-      width: 2
+      width: 3
     },
     {
       label: '$20M Buy',
       field: 'm20_buy',
+      name: 'buy',
       width: 2
     },
     {
-      label: '$20M Mid',
-      field: 'm20_mid',
-      name: 'buy',
-      width: 2
+      label: '$20M Pressure',
+      field: 'm20_pressure',
+      width: 3
     },
     {
       label: '$20M Sell',

@@ -10,6 +10,7 @@ const vueData = {
   logs: [],
   grouping: 'hour',
   target: 'default',
+  time: 'all',
   width: 980,
   height: 500
 };
@@ -32,14 +33,28 @@ new Vue({
       vueData.target = target;
       this.renderChart();
     },
+    setTime(time){
+      console.log('changing time', time)
+      vueData.time = time;
+      this.renderChart();
+    },
     renderChart() {
       if (document.getElementsByTagName('svg')){
           d3.selectAll('svg').remove();
       }
 
+      let logs;
+      // if cutting logs to a date restriction, filter them
+      if(this.time!=='all'){
+        const cutoff = new Date() - this.time;
+        logs = this.logs.filter(l=>new Date(l.minute).getTime() > cutoff);
+      }else{
+        logs = this.logs;
+      }
+
       const recordKeys = Object.keys(this.logs[0]);
       // prep the data, merging records via mean() of each numeric value
-      console.log(this.logs);
+      // console.log(logs);
       const grouping = d3.nest()
         .key(d=>d[this.grouping])
         .rollup(function(v) {
@@ -51,8 +66,8 @@ new Vue({
           })
           return record;
         })
-        .entries(this.logs);
-      console.log({grouping});
+        .entries(logs);
+      // console.log({grouping});
 
       // prep the data, extract each line we want to draw into a new series
       const series = [];
@@ -69,7 +84,7 @@ new Vue({
           label: '$'+this.target.replace('m','')+'M '+f,
           field: `${this.target}_${f}`,
           name: f,
-          width: 1
+          width: f==='pressure' ? 2 : 1
         }
       }))
 
@@ -90,7 +105,7 @@ new Vue({
           w: conf.width
         };
         series.push(data);
-        console.log(conf)
+        // console.log(conf)
         if(conf.field==='price'){
           priceData = data.p;
         }
@@ -163,7 +178,7 @@ new Vue({
           .y1(d=>y(d.y))
         );
 
-      var line = d3.line()
+      const line = d3.line()
         .x(d=>x(d.x))
         .y(d=>y(d.y));
 
@@ -171,7 +186,6 @@ new Vue({
         svg.append("path")
           .data([path])
           .attr("class", "line")
-          .text(d=>d.l)
           .style('stroke-width', d=>d.w)
           .style('stroke', d=>color(d.l))
           .style('fill', 'none')

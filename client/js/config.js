@@ -7,20 +7,10 @@ module.exports = {
       field: 'price',
       width: 2
     },
-    // {
-    //   label: '$1M Buy',
-    //   field: 'm1_buy',
-    //   width: 1
-    // },
-    // {
-    //   label: '$1M Sell',
-    //   field: 'm1_sell',
-    //   width: 1
-    // },
     {
       label: '$1M Pressure',
       field: 'm1_pressure',
-      width: 1
+      width: 2
     },
     {
       label: '$5M Pressure',
@@ -30,22 +20,24 @@ module.exports = {
     {
       label: '$10M Pressure',
       field: 'm10_pressure',
-      width: 3
+      width: 2
     },
     {
       label: '$20M Buy',
       field: 'm20_buy',
-      width: 4
+      width: 2
     },
     {
       label: '$20M Mid',
       field: 'm20_mid',
-      width: 4
+      name: 'buy',
+      width: 2
     },
     {
       label: '$20M Sell',
       field: 'm20_sell',
-      width: 4
+      name: 'sell',
+      width: 2
     }
   ]
 }

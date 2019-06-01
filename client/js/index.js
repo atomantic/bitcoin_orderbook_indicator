@@ -57,16 +57,18 @@ new Vue({
       // prep the data, extract each line we want to draw into a new series
       const series = [];
       const keys = [];
-      let priceData;
+      let priceData, supportData, resistanceData;
 
       const lines = this.target==='default' ? config.lines : [{
         label: 'Price',
         field: 'price',
+        name: 'price',
         width: 2
       }].concat(config.fields.map(f=>{
         return {
           label: '$'+this.target.replace('m','')+'M '+f,
           field: `${this.target}_${f}`,
+          name: f,
           width: 1
         }
       }))
@@ -88,8 +90,15 @@ new Vue({
           w: conf.width
         };
         series.push(data);
+        console.log(conf)
         if(conf.field==='price'){
           priceData = data.p;
+        }
+        if(conf.name==='buy'){
+          supportData = data.p;
+        }
+        if(conf.name==='sell'){
+          resistanceData = data.p;
         }
       });
       window.series = series;
@@ -139,8 +148,8 @@ new Vue({
       // scale the range of the data
       x.domain(d3.extent(priceData, d=>d.x));
       y.domain([
-        d3.min(priceData, d => d.y - d.y*.2),
-        d3.max(priceData, d => d.y + d.y*.2)
+        d3.min(supportData, d => d.y - d.y*.2),
+        d3.max(resistanceData, d => d.y + d.y*.2)
       ]);
 
       // add the area

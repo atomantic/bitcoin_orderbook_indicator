@@ -84,6 +84,8 @@ new Vue({
           label: '$'+this.target.replace('m','')+'M '+f,
           field: `${this.target}_${f}`,
           name: f,
+          resistance: f==='sell',
+          support: f==='buy',
           width: f==='pressure' ? 2 : 1
         }
       }))
@@ -109,13 +111,18 @@ new Vue({
         if(conf.field==='price'){
           priceData = data.p;
         }
-        if(conf.name==='buy'){
+        if(conf.support){
           supportData = data.p;
         }
-        if(conf.name==='sell'){
+        if(conf.resistance){
           resistanceData = data.p;
         }
       });
+      if(!resistanceData) resistanceData = priceData;
+      if(!supportData) supportData = priceData;
+
+      console.log('bottom res', resistanceData[0])
+      console.log('top support',supportData[0])
       window.series = series;
 
       var color = d3.scaleOrdinal()
@@ -137,34 +144,12 @@ new Vue({
           .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");
 
-      // LEGEND
-      // Add one dot in the legend for each name.
-      svg.selectAll("mydots")
-        .data(keys)
-        .enter()
-        .append("circle")
-          .attr("cx", 50)
-          .attr("cy", (d,i) => 25 + i*25) // 100 is where the first dot appears. 25 is the distance between dots
-          .attr("r", 7)
-          .style("fill", d=>color(d))
-
-      // Add one dot in the legend for each name.
-      svg.selectAll("mylabels")
-        .data(keys)
-        .enter()
-        .append("text")
-          .attr("x", 60)
-          .attr("y", (d,i) => 25 + i*25)
-          .style("fill", d=>color(d))
-          .text(d=>d)
-          .attr("text-anchor", "left")
-          .style("alignment-baseline", "middle")
 
       // scale the range of the data
       x.domain(d3.extent(priceData, d=>d.x));
       y.domain([
-        d3.min(supportData, d => d.y - d.y*.2),
-        d3.max(resistanceData, d => d.y + d.y*.2)
+        d3.min(supportData, d => d.y-.01*d.y),
+        d3.max(resistanceData, d => d.y+.01*d.y)
       ]);
 
       // add the area
@@ -200,6 +185,29 @@ new Vue({
       // add the Y Axis
       svg.append("g")
         .call(d3.axisLeft(y));
+
+      // LEGEND
+      // Add one dot in the legend for each name.
+      svg.selectAll("mydots")
+        .data(keys)
+        .enter()
+        .append("circle")
+          .attr("cx", 40)
+          .attr("cy", (d,i) => 10 + i*20)
+          .attr("r", 7)
+          .style("fill", d=>color(d))
+
+      // Add one dot in the legend for each name.
+      svg.selectAll("mylabels")
+        .data(keys)
+        .enter()
+        .append("text")
+          .attr("x", 50)
+          .attr("y", (d,i) => 11 + i*20)
+          .style("fill", d=>color(d))
+          .text(d=>d)
+          .attr("text-anchor", "left")
+          .style("alignment-baseline", "middle")
     }
 
   },

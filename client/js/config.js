@@ -5,6 +5,7 @@ module.exports = {
     {
       label: 'Price',
       field: 'price',
+      resistance: true,
       width: 2
     },
     {
@@ -23,21 +24,10 @@ module.exports = {
       width: 3
     },
     {
-      label: '$20M Buy',
-      field: 'm20_buy',
-      name: 'buy',
-      width: 2
-    },
-    {
       label: '$20M Pressure',
       field: 'm20_pressure',
+      support: true,
       width: 3
-    },
-    {
-      label: '$20M Sell',
-      field: 'm20_sell',
-      name: 'sell',
-      width: 2
     }
   ]
 }

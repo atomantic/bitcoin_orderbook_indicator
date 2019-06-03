@@ -125,19 +125,19 @@ new Vue({
       console.log('top support',supportData[0])
       window.series = series;
 
-      var color = d3.scaleOrdinal()
+      const color = d3.scaleOrdinal()
         .domain(keys)
         .range(d3.schemeSet2);
 
-      var margin = { top: 20, right: 20, bottom: 30, left: 50 };
-      var width = this.width - margin.left - margin.right;
-      var height = this.height - margin.top - margin.bottom;
+      const margin = { top: 20, right: 20, bottom: 30, left: 50 };
+      const width = this.width - margin.left - margin.right;
+      const height = this.height - margin.top - margin.bottom;
 
       // set the ranges
-      var x = d3.scaleTime().range([0, width]);
-      var y = d3.scaleLinear().range([height, 0]);
+      const x = d3.scaleTime().range([0, width]);
+      const y = d3.scaleLinear().range([height, 0]);
 
-      var svg = d3.select("#all-data").append("svg")
+      const svg = d3.select("#all-data").append("svg")
           .attr("width", width + margin.left + margin.right)
           .attr("height", height + margin.top + margin.bottom)
           .append("g")
@@ -208,6 +208,52 @@ new Vue({
           .text(d=>d)
           .attr("text-anchor", "left")
           .style("alignment-baseline", "middle")
+
+
+      const chart_cash = d3.select("#cash").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", 200 + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")");
+
+
+      const cash_data = grouping.map(group=>{
+        return {
+          x: new Date(group.key),
+          y: group.value.total_buy / 1000000
+        }
+      });
+      const x_cash = d3.scaleTime().range([0, width]);
+      const y_cash = d3.scaleLinear().range([200, 0]);
+      // scale the range of the data
+      x_cash.domain(d3.extent(cash_data, d=>d.x));
+      y_cash.domain([
+        d3.min(cash_data, d => d.y-.01*d.y),
+        d3.max(cash_data, d => d.y+.01*d.y)
+      ]);
+      const cash_line = d3.line()
+        .x(d=>x_cash(d.x))
+        .y(d=>y_cash(d.y));
+
+      // add the X Axis
+      chart_cash.append("g")
+        .attr("transform", "translate(0," + 200 + ")")
+        .call(d3.axisBottom(x_cash));
+
+      // add the Y Axis
+      chart_cash.append("g")
+        .call(d3.axisLeft(y_cash));
+
+
+      chart_cash.append("path")
+        .data([cash_data])
+        .attr("class", "line")
+        .style('stroke-width', 1)
+        .style('stroke', 'blue')
+        .style('fill', 'none')
+        .attr("d", d=>cash_line(d));
+
     }
 
   },

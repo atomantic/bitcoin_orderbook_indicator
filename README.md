@@ -3,13 +3,32 @@
 > DISCLAIMER: nothing in this project is financial advice. Any ideas of trading, investment, or other tomfoolery is at your own risk, discretion, and responsibility. The creator of this project has no position in Bitcoin. This is just for scientific interest.
 
 Polls the Coinbase Pro order book for BTCUSD and logs the following:
-- timestamp
-- the current price
-- the price at which the order book would slip downward if someone (or many people) market sold down $1M worth
-- the price at which the order book would slip upward if someone market purchased $1M worth
-- same for $5M, $10M, $20M, $50M
+- `datetime`
+- the current `price`
+- `m1_buy`: the price at which the order book would slip downward if someone (or many people) market sold down $1M worth
+- `m1_sell`: the price at which the order book would slip upward if someone market purchased $1M worth
+- same for $5M (`m5_buy`, `m5_sell`), $10M, $20M, $50M
 
 This data set can then be used to construct a trading indicator, showing how the order book price volumes relate to the changing prices.
+
+## The Indicator
+The primary theoretical indicator is called "pull" and shows the weight that the orderbook plays on pulling the price into a new direction. The pull is calculated for each threshold ($1M, $5M, $10M, $20M, $50M) using this formula: 
+`sell_limit_price - market_price + buy_limit_price`
+
+To make more sense of this, you can think of it as taking the dollar difference between the actual `price` and the slippage up (`sell_diff`), and taking the dollar slippage between the actual `price` and the slippage down (`buy_diff`), then measuring the pull as `price + sell_diff - buy_diff`.
+
+### Example
+In the case of the `$1,000,000` price threshold: 
+- let's say the `price` is `$8000`
+-`$1M` in buying would slip upward to `$8250` - diff is `$250`
+-`$1M` in selling would slip downward to `$7500` - diff is `$500`
+
+There is more ceiling pressure than floor support (twice as much), so the `pull` is:
+```
+8250 - 8000 + 7500 = 7750
+```
+
+This indicates that downward movement has less resistence than upward movement.
 
 ## What?
 Here you can see when Bitcoin was in the `$6500` zone on May 10th, 2019 that the order books were thin on the sell side compared to the buy side. $7.5M in market selling action would reduce the price to `~$6020`, but $7M in market purchases would raise the price to `~$11,500`:
@@ -52,7 +71,7 @@ Additionally, the app runs a UI service that streams the data via websockets to 
 This is very experimental. As such, I realized some data I wanted to collect after the engine was running for a few days. Rather than deleting the old data, I backfilled generic approximations for the new data fields:
 ```
 replacing: ([^Z]+Z\s[\d.]+[\d.]+\s[\d.]+\s[\d.]+\s[\d.]+\s[\d.]+)
-with: $1	55000000	180000	250000	0.01
+with: $1	54635567	184140	250000	0.01
 ```
 These fields are:
 `total_buy` `total_sell_volume` `max_up_slippage` `max_down_slippage`

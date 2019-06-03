@@ -86,7 +86,7 @@ new Vue({
           name: f,
           resistance: f==='sell',
           support: f==='buy',
-          width: f==='pressure' ? 2 : 1
+          width: f==='pull' ? 2 : 1
         }
       }))
 

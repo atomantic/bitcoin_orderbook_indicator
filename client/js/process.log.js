@@ -17,7 +17,8 @@ module.exports = function(log){
     // log[limit+'_percentage'] = log[limit+'_buy_diff'] / log[limit+'_range']
     // log[limit+'_support'] = log.price * (1-log[limit+'_percentage'])
     log[limit+'_mid'] = (log[limit+'_buy'] + log[limit+'_sell']) / 2
-    log[limit+'_pressure'] = log.price + log[limit+'_sell_diff'] - log[limit+'_buy_diff']
+    // log[limit+'_pull'] = log.price + log[limit+'_sell_diff'] - log[limit+'_buy_diff']
+    log[limit+'_pull'] = log[limit+'_sell'] - log.price + log[limit+'_buy']
   });
   return log;
 };

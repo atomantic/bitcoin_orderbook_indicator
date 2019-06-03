@@ -1,6 +1,6 @@
 module.exports = {
   limits: ['m1','m5','m10','m20','m50'],
-  fields: ['buy','sell','mid','pressure'],
+  fields: ['buy','sell','mid','pull'],
   lines: [
     {
       label: 'Price',
@@ -9,23 +9,23 @@ module.exports = {
       width: 2
     },
     {
-      label: '$1M Pressure',
-      field: 'm1_pressure',
+      label: '$1M Pull',
+      field: 'm1_pull',
       width: 3
     },
     {
-      label: '$5M Pressure',
-      field: 'm5_pressure',
+      label: '$5M Pull',
+      field: 'm5_pull',
       width: 3
     },
     {
-      label: '$10M Pressure',
-      field: 'm10_pressure',
+      label: '$10M Pull',
+      field: 'm10_pull',
       width: 3
     },
     {
-      label: '$20M Pressure',
-      field: 'm20_pressure',
+      label: '$20M Pull',
+      field: 'm20_pull',
       support: true,
       width: 3
     }

@@ -11,8 +11,9 @@ const vueData = {
   grouping: 'hour',
   target: 'default',
   time: 'all',
-  width: 980,
-  height: 500
+  width: window.innerWidth-50,
+  height_main: 400,
+  height_sub: 200
 };
 window.vueData = vueData; // debug inspection and fiddling
 
@@ -129,9 +130,9 @@ new Vue({
         .domain(keys)
         .range(d3.schemeSet2);
 
-      const margin = { top: 20, right: 20, bottom: 30, left: 50 };
+      const margin = { top: 20, right: 50, bottom: 30, left: 50 };
       const width = this.width - margin.left - margin.right;
-      const height = this.height - margin.top - margin.bottom;
+      const height = this.height_main - margin.top - margin.bottom;
 
       // set the ranges
       const x = d3.scaleTime().range([0, width]);
@@ -210,9 +211,10 @@ new Vue({
           .style("alignment-baseline", "middle")
 
 
+      const height_sub = this.height_sub - margin.top - margin.bottom;
       const chart_cash = d3.select("#cash").append("svg")
         .attr("width", width + margin.left + margin.right)
-        .attr("height", 200 + margin.top + margin.bottom)
+        .attr("height", height_sub + margin.top + margin.bottom)
         .append("g")
         .attr("transform",
               "translate(" + margin.left + "," + margin.top + ")");
@@ -221,29 +223,54 @@ new Vue({
       const cash_data = grouping.map(group=>{
         return {
           x: new Date(group.key),
-          y: group.value.total_buy / 1000000
+          cash: group.value.total_buy / 1000000,
+          btc: group.value.total_sell
         }
       });
       const x_cash = d3.scaleTime().range([0, width]);
-      const y_cash = d3.scaleLinear().range([200, 0]);
+      const y_cash = d3.scaleLinear().range([height_sub, 0]);
+      const y_btc = d3.scaleLinear().range([height_sub, 0]);
       // scale the range of the data
       x_cash.domain(d3.extent(cash_data, d=>d.x));
       y_cash.domain([
-        d3.min(cash_data, d => d.y-.01*d.y),
-        d3.max(cash_data, d => d.y+.01*d.y)
+        d3.min(cash_data, d => d.cash-.01*d.cash),
+        d3.max(cash_data, d => d.cash+.01*d.cash)
+      ]);
+      y_btc.domain([
+        d3.min(cash_data, d => d.btc-.01*d.btc),
+        d3.max(cash_data, d => d.btc+.01*d.btc)
       ]);
       const cash_line = d3.line()
         .x(d=>x_cash(d.x))
-        .y(d=>y_cash(d.y));
+        .y(d=>y_cash(d.cash));
+      const btc_line = d3.line()
+        .x(d=>x_cash(d.x))
+        .y(d=>y_btc(d.btc));
+
+
+      // const yAxisLeft = d3.svg.axis().scale(y_cash)
+      //   .orient("left").ticks(5);
+
+      // const yAxisRight = d3.svg.axis().scale(y_btc)
+      //   .orient("right").ticks(5);
+
+      // console.log(cash_data)
 
       // add the X Axis
       chart_cash.append("g")
-        .attr("transform", "translate(0," + 200 + ")")
+        .attr("transform", "translate(0," + height_sub + ")")
         .call(d3.axisBottom(x_cash));
 
       // add the Y Axis
       chart_cash.append("g")
+        .attr("class", "yaxis")
+        .style('stroke', 'blue')
         .call(d3.axisLeft(y_cash));
+      chart_cash.append("g")
+        .attr("class", "yaxis")
+        .style('stroke', 'green')
+        .attr("transform", "translate(" + width + " ,0)")
+        .call(d3.axisRight(y_btc));
 
       chart_cash.append("path")
         .data([cash_data])
@@ -252,6 +279,13 @@ new Vue({
         .style('stroke', 'blue')
         .style('fill', 'none')
         .attr("d", d=>cash_line(d));
+      chart_cash.append("path")
+        .data([cash_data])
+        .attr("class", "line")
+        .style('stroke-width', 1)
+        .style('stroke', 'green')
+        .style('fill', 'none')
+        .attr("d", d=>btc_line(d));
 
       chart_cash
         .append("text")
@@ -259,6 +293,14 @@ new Vue({
         .attr("y", 20)
         .style("fill", 'blue')
         .text("dollars on the table (in millions)")
+        .attr("text-anchor", "left")
+        .style("alignment-baseline", "middle")
+      chart_cash
+        .append("text")
+        .attr("x", 20)
+        .attr("y", 40)
+        .style("fill", 'green')
+        .text("BTC on the table")
         .attr("text-anchor", "left")
         .style("alignment-baseline", "middle")
 

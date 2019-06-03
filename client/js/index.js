@@ -245,7 +245,6 @@ new Vue({
       chart_cash.append("g")
         .call(d3.axisLeft(y_cash));
 
-
       chart_cash.append("path")
         .data([cash_data])
         .attr("class", "line")
@@ -253,6 +252,15 @@ new Vue({
         .style('stroke', 'blue')
         .style('fill', 'none')
         .attr("d", d=>cash_line(d));
+
+      chart_cash
+        .append("text")
+        .attr("x", 20)
+        .attr("y", 20)
+        .style("fill", 'blue')
+        .text("dollars on the table (in millions)")
+        .attr("text-anchor", "left")
+        .style("alignment-baseline", "middle")
 
     }
 

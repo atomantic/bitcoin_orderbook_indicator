@@ -150,7 +150,7 @@ new Vue({
       x.domain(d3.extent(priceData, d=>d.x));
       y.domain([
         d3.min(supportData, d => d.y-.01*d.y),
-        d3.max(resistanceData, d => d.y+.01*d.y)
+        d3.max(resistanceData, d => d.y+.03*d.y)
       ]);
 
       // add the area
@@ -186,6 +186,9 @@ new Vue({
       // add the Y Axis
       svg.append("g")
         .call(d3.axisLeft(y));
+      svg.append("g")
+        .attr("transform", "translate(" + width + " ,0)")
+        .call(d3.axisRight(y));
 
       // LEGEND
       // Add one dot in the legend for each name.
@@ -317,17 +320,17 @@ new Vue({
 });
 
 
-socket.on('hello', function(data){
-  console.log('socket', data);
+socket.on('hello', function(/*data*/){
+  // console.log('socket', data);
   vueData.connected = true;
 });
 
 socket.on('logs', function(logs){
-  console.log('logs', logs);
+  // console.log('logs', logs);
   vueData.logs = logs.map(processLog);
 });
 
 socket.on('log', function(line){
-  console.log('log', line);
+  // console.log('log', line);
   vueData.logs.push(processLog(line));
 });

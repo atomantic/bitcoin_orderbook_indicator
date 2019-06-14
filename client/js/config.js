@@ -26,6 +26,11 @@ module.exports = {
     {
       label: '$20M Pull',
       field: 'm20_pull',
+      width: 3
+    },
+    {
+      label: '$50M Pull',
+      field: 'm50_pull',
       support: true,
       width: 3
     }

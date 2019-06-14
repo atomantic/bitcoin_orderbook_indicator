@@ -28,16 +28,16 @@ html
               button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setGroup('hour')", :disabled="grouping==='hour'") hour
               button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setGroup('day')", :disabled="grouping==='day'") day
           .set
-            strong set: 
+            strong threshold: 
             .btn-group
-              button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTarget('default')", :disabled="target==='default'") config
+              button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTarget('default')", :disabled="target==='default'") all
               button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTarget('m1')", :disabled="target==='m1'") $1M
               button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTarget('m5')", :disabled="target==='m5'") $5M
               button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTarget('m10')", :disabled="target==='m10'") $10
               button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTarget('m20')", :disabled="target==='m20'") $20
               button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTarget('m50')", :disabled="target==='m50'") $50
           .set
-            strong time: 
+            strong window: 
             .btn-group
               button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTime('all')", :disabled="time==='all'") all
               button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTime(3600000)", :disabled="time===3600000") hour

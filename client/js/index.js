@@ -122,8 +122,8 @@ new Vue({
       if(!resistanceData) resistanceData = priceData;
       if(!supportData) supportData = priceData;
 
-      console.log('bottom res', resistanceData[0])
-      console.log('top support',supportData[0])
+      // console.log('bottom res', resistanceData[0])
+      // console.log('top support',supportData[0])
       window.series = series;
 
       const color = d3.scaleOrdinal()

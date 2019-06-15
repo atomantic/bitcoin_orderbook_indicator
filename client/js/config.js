@@ -1,5 +1,5 @@
 module.exports = {
-  limits: ['m1','m5','m10','m20','m50'],
+  limits: ['m1','m5','m10','m20','m30','m40','m50'],
   fields: ['buy','sell','mid','pull'],
   lines: [
     {
@@ -26,6 +26,16 @@ module.exports = {
     {
       label: '$20M Pull',
       field: 'm20_pull',
+      width: 3
+    },
+    {
+      label: '$30M Pull',
+      field: 'm30_pull',
+      width: 3
+    },
+    {
+      label: '$40M Pull',
+      field: 'm40_pull',
       width: 3
     },
     {

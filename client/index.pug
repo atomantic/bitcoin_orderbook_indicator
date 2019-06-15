@@ -33,17 +33,19 @@ html
               button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTarget('default')", :disabled="target==='default'") all
               button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTarget('m1')", :disabled="target==='m1'") $1M
               button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTarget('m5')", :disabled="target==='m5'") $5M
-              button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTarget('m10')", :disabled="target==='m10'") $10
-              button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTarget('m20')", :disabled="target==='m20'") $20
-              button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTarget('m50')", :disabled="target==='m50'") $50
+              button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTarget('m10')", :disabled="target==='m10'") 10
+              button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTarget('m20')", :disabled="target==='m20'") 20
+              button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTarget('m30')", :disabled="target==='m30'") 30
+              button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTarget('m40')", :disabled="target==='m40'") 40
+              button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTarget('m50')", :disabled="target==='m50'") 50
           .set
             strong window: 
             .btn-group
-              button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTime('all')", :disabled="time==='all'") all
               button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTime(3600000)", :disabled="time===3600000") hour
               button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTime(43200000)", :disabled="time===43200000") 1/2 day
               button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTime(86400000)", :disabled="time===86400000") day
               button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTime(604800000)", :disabled="time===604800000") week
+              button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTime('all')", :disabled="time==='all'") all
               //- button.btn.btn-sm.btn-outline-primary(role='button', v-on:click="setTime(2592000000)") 30 days
         #cash
       #footpad

@@ -7,7 +7,7 @@ Polls the Coinbase Pro order book for BTCUSD and logs the following:
 - the current `price`
 - `m1_buy`: the price at which the order book would slip downward if someone (or many people) market sold down $1M worth
 - `m1_sell`: the price at which the order book would slip upward if someone market purchased $1M worth
-- same for $5M (`m5_buy`, `m5_sell`), $10M, $20M, $50M
+- same for $5M (`m5_buy`, `m5_sell`), $10M, $20M, $30M, $40M, $50M
 
 This data set can then be used to construct a trading indicator, showing how the order book price volumes relate to the changing prices.
 
@@ -58,7 +58,7 @@ The logger runs every 1 minute and logs to a rolling log file in the `data` dire
 The payload for the BTCUSD orderbook is `2.8MB`, so we have to limit the data collection every minute :)
 We log the following columns, tab delimited
 ```
-datetime price size bid ask volume total_buy total_sell_volume max_up_slippage max_down_slippage m1_buy m5_buy m10_buy m20_buy m50_buy m1_sell m5_sell m10_sell m20_sell m50_sell
+datetime price size bid ask volume total_buy total_sell_volume max_up_slippage max_down_slippage m1_buy m5_buy m10_buy m20_buy m30_buy m40_buy m50_buy m1_sell m5_sell m10_sell m20_sell m30_sell m40_sell m50_sell
 ```
 We can then take this data in python (there's a Jupyter Notebook in the `notebooks` directory), process the data, and visualize it (just for experimentation).
 
@@ -69,12 +69,29 @@ Additionally, the app runs a UI service that streams the data via websockets to 
 ## Notes on Project Data
 
 This is very experimental. As such, I realized some data I wanted to collect after the engine was running for a few days. Rather than deleting the old data, I backfilled generic approximations for the new data fields:
+
+Data Collection Update #1 (`2019-05-31-081655`):
 ```
-replacing: ([^Z]+Z\s[\d.]+[\d.]+\s[\d.]+\s[\d.]+\s[\d.]+\s[\d.]+)
+replacing: ([^Z]+Z(\s[\d.]+){5})
 with: $1	54635567	184140	250000	0.01
 ```
 These fields are:
 `total_buy` `total_sell_volume` `max_up_slippage` `max_down_slippage`
+
+Data Collection Update #2 (2019-06-15):
+```
+replacing: ([^Z]+Z(\s[\d.]+){13})
+with: $1	6612	5850
+```
+These fields are:
+`m30_buy` `m40_buy`
+& 
+```
+replacing: ([^Z]+Z(\s[\d.]+){20})
+with: $1	10000   11494
+```
+These fields are:
+`m30_sell` `m40_sell`
 
 ## Getting Started
 

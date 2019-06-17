@@ -3,7 +3,7 @@ const config = require('./config');
 const Vue = require('vue/dist/vue.js');
 const processLog = require('./process.log');
 const socket = io();
-const dateFields = ['date', 'hour', 'minute', 'day'];
+const dateFields = ['date', 'hour', 'minute', 'day', '6h'];
 
 const vueData = {
   connected: false,

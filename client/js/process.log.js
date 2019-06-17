@@ -8,6 +8,9 @@ module.exports = function(log){
   // split date for groupings: 2019-05-30T15:03:37.884Z
   log.day = log.date.split('T')[0] + 'T00:00:00.000Z'; // 2019-05-30
   log.hour = log.date.replace(/\d{2}:\d{2}.\d{3}Z/, '00:00.000Z');
+  // split date for groupings: 2019-05-30T15:00:00.000Z
+  let h6 = ((Number(log.hour[11]+log.hour[12]) % 4)*6) + ''
+  log.h6 = log.hour.substr(0,11) + (h6.length===1 ? '0' : '') + h6 + ':00:00.000Z';
   log.minute = log.date.replace(/\d{2}.\d{3}Z/, '00.000Z'); // 2019-05-30T15:03
   // log.date = new Date(log.date);
   config.limits.forEach(limit=>{

@@ -9,7 +9,7 @@ const vueData = {
   connected: false,
   logs: [],
   grouping: 'hour',
-  target: 'default',
+  target: 'm50',
   time: 'all',
   width: window.innerWidth-50,
   height_main: 400,

@@ -24,6 +24,10 @@ new Vue({
     // e.g. register components
   },
   methods: {
+    refresh(){
+      console.log('reloading data')
+      socket.emit('reload')
+    },
     setGroup(grouping){
       console.log('changing grouping', grouping)
       vueData.grouping = grouping;
@@ -326,7 +330,7 @@ socket.on('hello', function(/*data*/){
 });
 
 socket.on('logs', function(logs){
-  // console.log('logs', logs);
+  console.log('logs', logs.length);
   vueData.logs = logs.map(processLog);
 });
 

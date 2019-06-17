@@ -55,6 +55,9 @@ html
             .navbar-brand
               | &copy; Adam Eivy <a href="https://twitter.com/antic" target="off">@antic</a>
             ul.nav.navbar-nav.ml-auto
+              li(v-if="connected")
+                a.nav-link
+                  i.fa.fa-refresh(v-on:click="refresh")
               li
                 span.nav-link(v-if="connected")
                   i.fa.fa-chain

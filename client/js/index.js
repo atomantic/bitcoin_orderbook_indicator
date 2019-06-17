@@ -10,7 +10,7 @@ const vueData = {
   logs: [],
   grouping: 'hour',
   target: 'm50',
-  time: 'day',
+  time: 86400000,
   width: window.innerWidth-50,
   height_main: 400,
   height_sub: 200

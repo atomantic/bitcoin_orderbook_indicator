@@ -8,7 +8,8 @@ const state = require('./lib/app.state')
 const logsToJSON = require('./lib/logs.to.json')
 
 logsToJSON((logs)=>{
-  state.logs = logs
+  // only last 14 days
+  state.logs = logs.slice(logs.length - 20160)
 })
 
 // kick off the data collector

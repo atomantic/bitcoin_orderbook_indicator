@@ -77,6 +77,7 @@ const runner = {
         console.log(logLine)
         const parsed = logParse(logLine)
         state.logs.push(parsed)
+        state.logs.shift() // keep from memory overload (rolling window)
         sockets.all('log', parsed)
     })
   }
